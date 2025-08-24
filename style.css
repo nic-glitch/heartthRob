@@ -1,44 +1,47 @@
-/* Hide when aria-hidden is true */
+/* Light blue background + basic centering */
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #e6f3ff; /* light blue */
+  display: grid;
+  place-items: center;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Hide any element marked aria-hidden="true" */
 [aria-hidden="true"] { display: none !important; }
 
-/* Optional basics so images aren’t tiny */
-body { margin: 0; display: grid; place-items: center; min-height: 100svh; background:#fff; }
-.cover { max-width: 90vw; height: auto; display: block; cursor: pointer; }
-.spread { width: 90vw; max-width: 1200px; }
-.page { position: relative; }
-.page img, .face { width: 100%; height: auto; display: block; }
-.flipcard { transform-style: preserve-3d; transform-origin: left center; transition: transform .9s ease; }
-.flip-forward { transform: rotateY(-180deg); }
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  text-align: center;
-  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-  padding: 50px;
-  color: #333;
+/* Layout: two-page spread */
+.spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(90vw, 1200px);
+  gap: 0;
 }
 
-h1 {
-  font-size: 3em;
-  color: #d6336c;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-}
+/* Make images fill their halves nicely */
+.page, .page img { width: 100%; height: auto; }
+.cover { width: min(90vw, 1200px); height: auto; cursor: pointer; display: block; }
 
-button {
-  background: #ff4d6d;
-  color: white;
-  padding: 12px 24px;
-  border: none;
+/* Flipcard essentials so front/back don't show together */
+.page.right { position: relative; overflow: hidden; }
+.flipcard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform 0.9s ease;
   cursor: pointer;
-  font-size: 18px;
-  margin-top: 20px;
-  border-radius: 12px;
-  transition: 0.3s;
 }
-
-button:hover {
-  background: #e63956;
+.face {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  backface-visibility: hidden;
+  display: block;
 }
+.face.back { transform: rotateY(180deg); }
+.flip-forward { transform: rotateY(-180deg); }
 
-#message {
-  font-size: 1.2em;
   margin-top: 20px;
 }
