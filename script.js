@@ -1,10 +1,10 @@
-// Your page order
+// Your page order (inside the "pages" folder)
 const pages = [
-  "frontCover.jpg", // 0
-  "page2.jpg",      // 1
-  "page3.jpg",      // 2
-  "page4.jpg",      // 3
-  "backCover.jpg"   // 4
+  "pages/frontCover.jpg", // 0
+  "pages/page2.jpg",      // 1
+  "pages/page3.jpg",      // 2
+  "pages/page4.jpg",      // 3
+  "pages/backCover.jpg"   // 4
 ];
 
 // Elements
@@ -48,7 +48,7 @@ function showSpread(leftIdx, rightIdx) {
   rightFront.src = pages[rightIdx];
   rightBack.src = (rightIdx + 1 < pages.length)
     ? pages[rightIdx + 1]
-    : "backCover.jpg";
+    : "pages/backCover.jpg";
 
   flipcard.classList.remove("flip-forward");
 }
@@ -61,7 +61,7 @@ cover.addEventListener("click", () => {
   currentIndex = 2;
 });
 
-// Click left page → back to cover (since you only have 1 spread before back cover)
+// Click left page → back to cover
 document.getElementById("leftPage").addEventListener("click", () => {
   showCover();
 });
@@ -75,16 +75,7 @@ document.getElementById("rightPage").addEventListener("click", () => {
       showSpread(3, 4); // page4 (left), backCover (right)
       currentIndex = 4;
     }, { once: true });
-  } else if (currentIndex === 4) {
-    // After page4 → back cover
-    showBackCover();
-  }
-});
-
-// Click back cover → return to front
-backCover.addEventListener("click", () => {
-  showCover();
-});
+  } else if (currentIn
 
 // Preload
 pages.forEach(src => { const img = new Image(); img.src = src; });
