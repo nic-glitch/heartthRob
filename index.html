@@ -1,15 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Heartthrob Rob</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>💖 Heartthrob Rob 💖</h1>
-  <p id="message">Welcome to Heartthrob Rob’s page.</p>
-  <button onclick="changeMessage()">Click Me</button>
+<!-- Cover -->
+<img class="cover" id="cover" src="pages/frontCover.jpg" alt="Front Cover" />
 
-  <script src="script.js"></script>
-</body>
-</html>
+<!-- Spread -->
+<div class="spread" id="spread" aria-hidden="true">
+  <div class="page left" id="leftPage">
+    <img id="leftImg" alt="Left Page" />
+  </div>
+  <div class="page right" id="rightPage">
+    <div class="flipcard" id="flipcard">
+      <img class="face front" id="rightFront" alt="Right Page" />
+      <img class="face back" id="rightBack" alt="Next Page" />
+    </div>
+  </div>
+</div>
+
+<!-- Back Cover -->
+<img class="cover" id="backCover" src="pages/backCover.jpg" alt="Back Cover" aria-hidden="true" />
