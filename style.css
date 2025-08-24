@@ -11,6 +11,15 @@ html, body {
 /* Hide any element marked aria-hidden="true" */
 [aria-hidden="true"] { display: none !important; }
 
+/* Make images behave nicely */
+img { max-width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+
+/* Ensure the cover is on top and clickable */
+.cover { width: min(90vw, 1200px); height: auto; cursor: pointer; display: block; position: relative; z-index: 2; }
+
+/* Keep spread/back under the cover unless shown */
+.spread, #backCover { position: relative; z-index: 1; }
+
 /* Layout: two-page spread */
 .spread {
   display: grid;
@@ -19,9 +28,9 @@ html, body {
   gap: 0;
 }
 
-/* Make images fill their halves nicely */
-.page, .page img { width: 100%; height: auto; }
-.cover { width: min(90vw, 1200px); height: auto; cursor: pointer; display: block; }
+/* Page halves */
+.page { position: relative; overflow: hidden; }
+.page img { width: 100%; height: auto; display: block; }
 
 /* Flipcard essentials so front/back don't show together */
 .page.right { position: relative; overflow: hidden; }
@@ -42,6 +51,8 @@ html, body {
 }
 .face.back { transform: rotateY(180deg); }
 .flip-forward { transform: rotateY(-180deg); }
+
+
 
   margin-top: 20px;
 }
