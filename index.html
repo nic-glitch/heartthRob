@@ -1,18 +1,32 @@
-<!-- Front Cover -->
-<img class="cover" id="cover" src="pages/frontCover.jpg" alt="Front Cover" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Heartthrob Rob</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Front Cover -->
+  <img class="cover" id="cover" src="pages/frontCover.jpg" alt="Front Cover" />
 
-<!-- Spread -->
-<div class="spread" id="spread" aria-hidden="true">
-  <div class="page left" id="leftPage">
-    <img id="leftImg" alt="Left Page" />
-  </div>
-  <div class="page right" id="rightPage">
-    <div class="flipcard" id="flipcard">
-      <img class="face front" id="rightFront" alt="Right Page" />
-      <img class="face back" id="rightBack" alt="Next Page" />
+  <!-- Spread -->
+  <div class="spread" id="spread" aria-hidden="true">
+    <div class="page left" id="leftPage">
+      <img id="leftImg" alt="Left Page" />
+    </div>
+    <div class="page right" id="rightPage">
+      <div class="flipcard" id="flipcard">
+        <img class="face front" id="rightFront" alt="Right Page" />
+        <img class="face back" id="rightBack" alt="Next Page" />
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Back Cover (hidden by default) -->
-<img class="cover" id="backCover" src="pages/backCover.jpg" alt="Back Cover" aria-hidden="true" />
+  <!-- Back Cover (hidden by default) -->
+  <img class="cover" id="backCover" src="pages/backCover.jpg" alt="Back Cover" aria-hidden="true" />
+
+  <!-- Load JS last -->
+  <script src="script.js"></script>
+</body>
+</html>
