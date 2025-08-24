@@ -63,9 +63,3 @@ function setSpread(idx) {
 
   // Prepare the back face for the flip (what appears after turning):
   // next spread’s
-
-
-
-
-// Preload
-pages.forEach(src => { const img = new Image(); img.src = src; });
