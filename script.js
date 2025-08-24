@@ -8,11 +8,11 @@ const pages = [
 ];
 
 // Elements
-const cover     = document.getElementById("cover");
-const backCover = document.getElementById("backCover");
-const spread    = document.getElementById("spread");
+const cover      = document.getElementById("cover");
+const backCover  = document.getElementById("backCover");
+const spread     = document.getElementById("spread");
 
-const leftImg   = document.getElementById("leftImg");
+const leftImg    = document.getElementById("leftImg");
 const rightFront = document.getElementById("rightFront");
 const rightBack  = document.getElementById("rightBack");
 const flipcard   = document.getElementById("flipcard");
@@ -21,7 +21,6 @@ const flipcard   = document.getElementById("flipcard");
 let mode = "cover";   // "cover" | "spread" | "back"
 let currentIndex = 1; // page2 starts as first left page inside
 
-// Show front cover
 function showCover() {
   mode = "cover";
   cover.removeAttribute("aria-hidden");
@@ -29,7 +28,6 @@ function showCover() {
   backCover.setAttribute("aria-hidden", "true");
 }
 
-// Show back cover
 function showBackCover() {
   mode = "back";
   cover.setAttribute("aria-hidden", "true");
@@ -37,7 +35,6 @@ function showBackCover() {
   backCover.removeAttribute("aria-hidden");
 }
 
-// Show a spread (two facing pages)
 function showSpread(leftIdx, rightIdx) {
   mode = "spread";
   cover.setAttribute("aria-hidden", "true");
@@ -52,8 +49,6 @@ function showSpread(leftIdx, rightIdx) {
 
   flipcard.classList.remove("flip-forward");
 }
-
-// --- Click handlers ---
 
 // Click front cover → open to first spread
 cover.addEventListener("click", () => {
@@ -75,7 +70,18 @@ document.getElementById("rightPage").addEventListener("click", () => {
       showSpread(3, 4); // page4 (left), backCover (right)
       currentIndex = 4;
     }, { once: true });
-  } else if (currentIn
+  } else if (currentIndex === 4) {
+    // After page4 → back cover
+    showBackCover();
+  }
+});
+
+// Click back cover → return to front
+backCover.addEventListener("click", showCover);
+
+// Preload
+pages.forEach(src => { const img = new Image(); img.src = src; });
+
 
 // Preload
 pages.forEach(src => { const img = new Image(); img.src = src; });
