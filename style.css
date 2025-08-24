@@ -1,4 +1,14 @@
-body {
+/* Hide when aria-hidden is true */
+[aria-hidden="true"] { display: none !important; }
+
+/* Optional basics so images aren’t tiny */
+body { margin: 0; display: grid; place-items: center; min-height: 100svh; background:#fff; }
+.cover { max-width: 90vw; height: auto; display: block; cursor: pointer; }
+.spread { width: 90vw; max-width: 1200px; }
+.page { position: relative; }
+.page img, .face { width: 100%; height: auto; display: block; }
+.flipcard { transform-style: preserve-3d; transform-origin: left center; transition: transform .9s ease; }
+.flip-forward { transform: rotateY(-180deg); }
   font-family: 'Helvetica Neue', Arial, sans-serif;
   text-align: center;
   background: linear-gradient(135deg, #ffdde1, #ee9ca7);
