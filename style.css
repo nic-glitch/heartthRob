@@ -33,6 +33,9 @@ img {
   -webkit-user-drag: none;
 }
 
+/* Strongest, covers all interactive surfaces */
+.cover, .page, .page img, .flipcard, .face { cursor: pointer; }
+
 /* ===============================
    Cover (singl
 
