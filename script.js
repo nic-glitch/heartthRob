@@ -1,52 +1,131 @@
-// Minimal, resilient flipbook (no animation dependency)
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("[flipbook] loaded");
+// ---- CONFIG: all images in /pages ----
+const pages = [
+  "pages/frontCover.jpg", // 0  (single)
+  "pages/page2.jpg",      // 1  ┐ spread 0
+  "pages/page3.jpg",      // 2  ┘
+  "pages/page4.jpg",      // 3  ┐ spread 1
+  "pages/page5.jpg",      // 4  ┘
+  "pages/page6.jpg",      // 5  ┐ spread 2
+  "pages/page7.jpg",      // 6  ┘
+  "pages/backCover.jpg"   // 7  (single)
+];
 
-  // 1) LIST ONLY FILES YOU ACTUALLY HAVE (exact names/case!)
-  // If you don't have page8 or page9, DELETE those lines below.
-  const pages = [
-    "pages/frontCover.jpg", // 0  (single)
-    "pages/page2.jpg",      // 1  ┐
-    "pages/page3.jpg",      // 2  ┘ spread 0
-    "pages/page4.jpg",      // 3  ┐
-    "pages/page5.jpg",      // 4  ┘ spread 1
-    "pages/page6.jpg",      // 5  ┐
-    "pages/page7.jpg",      // 6  ┘ spread 2
-    "pages/page8.jpg",      // 7  ┐ (optional; delete if not present)
-    "pages/page9.jpg",      // 8  ┘ (optional; delete if not present)
-    "pages/backCover.jpg"   // 9  (single; must be last)
-  ].filter(Boolean);
+// ---- ELEMENTS ----
+const cover      = document.getElementById("cover");
+const backCover  = document.getElementById("backCover");
+const spread     = document.getElementById("spread");
+const leftPage   = document.getElementById("leftPage");
+const rightPage  = document.getElementById("rightPage");
+const leftImg    = document.getElementById("leftImg");
+const rightFront = document.getElementById("rightFront");
+const rightBack  = document.getElementById("rightBack");
+const flipcard   = document.getElementById("flipcard");
 
-  // 2) ELEMENTS (IDs must match your index.html)
-  const cover      = document.getElementById("cover");
-  const backCover  = document.getElementById("backCover");
-  const spread     = document.getElementById("spread");
-  const leftPage   = document.getElementById("leftPage");
-  const rightPage  = document.getElementById("rightPage");
-  const leftImg    = document.getElementById("leftImg");
-  const rightFront = document.getElementById("rightFront"); // we’ll just use this as the right image
+// ---- STATE ----
+let mode = "cover";              // "cover" | "spread" | "back"
+let spreadIndex = 0;             // which two-page spread we’re on (0..last)
+let flipping = false;            // lock during animation
+const lastIndex = pages.length - 1;          // index of backCover
+const interior = pages.slice(1, lastIndex);  // [page2..pageN]
+const spreadCount = Math.ceil(interior.length / 2); // number of spreads
 
-  // Guard for missing nodes
-  if (!cover || !backCover || !spread || !leftPage || !rightPage || !leftImg || !rightFront) {
-    console.error("[flipbook] Missing one or more required elements. Check IDs in index.html.");
-    return;
+// Given a spread index, return [leftIdx, rightIdx] in the pages[] array
+function spreadPair(idx) {
+  // left starts at 1, advances by 2 per spread: 1,3,5,...
+  const leftIdx  = 1 + idx * 2;
+  const rightIdx = leftIdx + 1;
+  return [leftIdx, rightIdx];
+}
+
+// ---- VIEW HELPERS ----
+function showCover() {
+  mode = "cover";
+  flipping = false;
+  cover.removeAttribute("aria-hidden");
+  spread.setAttribute("aria-hidden", "true");
+  backCover.setAttribute("aria-hidden", "true");
+  spreadIndex = 0;
+}
+
+function showBackCover() {
+  mode = "back";
+  flipping = false;
+  cover.setAttribute("aria-hidden", "true");
+  spread.setAttribute("aria-hidden", "true");
+  backCover.removeAttribute("aria-hidden");
+}
+
+function setSpread(idx) {
+  const [leftIdx, rightIdx] = spreadPair(idx);
+  leftImg.src    = pages[leftIdx];
+  rightFront.src = pages[rightIdx];
+
+  // Prepare the back face for the flip (what appears after turning):
+  // next spread’s LEFT page, or back cover if we’re at the last spread
+  const [nextLeftIdx] = spreadPair(idx + 1);
+  rightBack.src = (idx < spreadCount - 1) ? pages[nextLeftIdx] : pages[lastIndex];
+}
+
+function showSpread(idx) {
+  mode = "spread";
+  flipping = false;
+
+  cover.setAttribute("aria-hidden", "true");
+  backCover.setAttribute("aria-hidden", "true");
+  spread.removeAttribute("aria-hidden");
+
+  setSpread(idx);
+  flipcard.classList.remove("flip-forward");
+  spreadIndex = idx;
+}
+
+// ---- INTERACTIONS ----
+cover.addEventListener("click", () => {
+  if (flipping) return;
+  showSpread(0); // open to first spread
+});
+
+leftPage.addEventListener("click", () => {
+  if (flipping || mode !== "spread") return;
+  if (spreadIndex === 0) {
+    showCover();
+  } else {
+    // (Optional: animate a left flip; here we just step back a spread)
+    showSpread(spreadIndex - 1);
   }
+});
 
-  // 3) STATE
-  const lastIndex   = pages.length - 1;            // backCover index
-  const interiorLen = lastIndex - 1;               // number of inside pages (page2..pageN)
-  const spreadCount = Math.ceil(interiorLen / 2);  // how many pairs of inside pages
-  let currentSpread = 0;                            // 0 .. spreadCount-1
+rightPage.addEventListener("click", () => {
+  if (flipping || mode !== "spread") return;
 
-  // spread 0 -> [1,2], spread 1 -> [3,4], spread 2 -> [5,6], ...
-  function spreadPair(idx) {
-    const leftIdx  = 1 + idx * 2;
-    const rightIdx = leftIdx + 1;
-    return [leftIdx, rightIdx];
+  if (spreadIndex < spreadCount - 1) {
+    // Flip forward to next spread
+    flipping = true;
+    flipcard.classList.add("flip-forward");
+    flipcard.addEventListener("transitionend", () => {
+      showSpread(spreadIndex + 1);
+    }, { once: true });
+  } else {
+    // At the last spread → go to back cover
+    showBackCover();
   }
+});
 
-  // 4) VIEW HELPERS
-  function showCov
+// Back cover → front cover
+backCover.addEventListener("click", showCover);
+
+// Keyboard helpers (Enter/Space)
+leftPage.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") leftPage.click();
+});
+rightPage.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") rightPage.click();
+});
+
+// ---- INIT ----
+pages.forEach(src => { const img = new Image(); img.src = src; });
+showCover();
+
 
 
 });
