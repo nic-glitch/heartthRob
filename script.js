@@ -126,7 +126,3 @@ rightPage.addEventListener("keydown", (e) => {
 pages.forEach(src => { const img = new Image(); img.src = src; });
 showCover();
 
-
-
-});
-
